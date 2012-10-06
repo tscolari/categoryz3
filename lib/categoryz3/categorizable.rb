@@ -24,23 +24,25 @@ module Categoryz3
     # Categories are retrieved from direct_category_items association, no subcategories included
     #
     def categories
+      return @categories if @categories
       category_ids = direct_category_items.all.map { |category| category.id }
-      Categoryz3::Category.where(id: category_ids)
+      @categories = Categoryz3::Category.where(id: category_ids)
     end
 
     # Public: Adds a category, or categories, to the model
     #
     # Examples:
     #
-    #   categorizable_object.add_category dummy_category
-    #   categorizable_object.add_categories dummy_category1, dummy_category2
+    #   categorizable_object.category = dummy_category
+    #   categorizable_object.categories = [dummy_category1, dummy_category2]
     #
-    def add_category(*categories)
-      categories.each do |category|
-        category.direct_items.create(categorizable: self)
+    def category=(categories)
+      [categories].flatten.each do |category|
+        category.direct_items.create(categorizable: self) if category
       end
+      @categories = nil
     end
-    alias_method :add_categories, :add_category
+    alias_method :categories=, :category=
 
     # Public: Removes a category, or categories, from the model
     #
@@ -52,6 +54,23 @@ module Categoryz3
     def remove_category(*categories)
       categories.each do |category|
         direct_category_items.where(category_id: category).destroy_all
+      end
+      @categories = nil
+    end
+    alias_method :remove_categories, :remove_category
+
+    # Public: Returns the id list of the categories linked to the model
+    #
+    def categories_list
+      categories.map(&:id).join(", ")
+    end
+
+    # Public: Accepts an array of category ids as parameter and adds all
+    # of them to the model
+    #
+    def categories_list=(ids)
+      self.categories = ids.split(",").map do |id|
+        Category.where(id: id).first
       end
     end
 

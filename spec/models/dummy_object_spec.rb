@@ -1,19 +1,20 @@
 require 'spec_helper'
 
 describe DummyObject do
-  let(:category) { FactoryGirl.create(:category) }
+  let(:category)     { FactoryGirl.create(:category) }
+  let(:category2)    { FactoryGirl.create(:category) }
   let(:dummy_object) { FactoryGirl.create(:dummy_object) }
 
   context "adding a category" do
-    describe "#add_category" do
+    describe "#category=" do
       it "should add a category to categorizable" do
-        dummy_object.add_category category
+        dummy_object.category = category
         dummy_object.categories.include?(category).should be_true
       end
 
       it "should add more than one category to categorizable" do
         categories = FactoryGirl.create_list(:category, 3)
-        dummy_object.add_category categories[0], categories[1], categories[2]
+        dummy_object.category = categories[0], categories[1], categories[2]
         categories.each do |category|
           dummy_object.categories.include?(category).should be_true
         end
@@ -22,7 +23,7 @@ describe DummyObject do
 
     describe "#remove_category" do
       before(:each) do
-        dummy_object.add_category(category)
+        dummy_object.category = category
       end
 
       it "should remove a category from the object" do
@@ -33,8 +34,7 @@ describe DummyObject do
       end
 
       it "should remove a list of categories from the object" do
-        category2 = FactoryGirl.create :category
-        dummy_object.add_category category2
+        dummy_object.category = category2
         dummy_object.categories.all.include?(category).should be_true
         dummy_object.categories.all.include?(category2).should be_true
         dummy_object.remove_category category, category2
@@ -49,7 +49,7 @@ describe DummyObject do
     describe "#having_category" do
       it "should only find items from the category" do
         correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
-        correct_dummy_list.each { |dummy| dummy.add_category(category) }
+        correct_dummy_list.each { |dummy| dummy.category = category }
         wrong_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
         dummy_matches = DummyObject.having_category(category).all
         dummy_matches.should =~ correct_dummy_list
@@ -60,7 +60,7 @@ describe DummyObject do
         wrong_dummy_list   = FactoryGirl.create_list(:dummy_object, 4)
         correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
         subcategory        = FactoryGirl.create(:category, :child, parent: category)
-        correct_dummy_list.each { |dummy| dummy.add_category(subcategory) }
+        correct_dummy_list.each { |dummy| dummy.category = subcategory }
         dummy_matches = DummyObject.having_category(category).all
         dummy_matches.should =~ correct_dummy_list
         dummy_matches.should_not =~ wrong_dummy_list
@@ -70,7 +70,7 @@ describe DummyObject do
     describe "#having_direct_category" do
       it "should only find items from the category" do
         correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
-        correct_dummy_list.each { |dummy| dummy.add_category(category) }
+        correct_dummy_list.each { |dummy| dummy.category = category }
         wrong_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
         dummy_matches = DummyObject.having_direct_category(category).all
         dummy_matches.should =~ correct_dummy_list
@@ -81,10 +81,25 @@ describe DummyObject do
         wrong_dummy_list   = FactoryGirl.create_list(:dummy_object, 4)
         correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
         subcategory        = FactoryGirl.create(:category, :child, parent: category)
-        correct_dummy_list.each { |dummy| dummy.add_category(subcategory) }
+        correct_dummy_list.each { |dummy| dummy.category = subcategory }
         dummy_matches = DummyObject.having_direct_category(category).all
         dummy_matches.should be_empty
       end
+    end
+  end
+
+  describe "#categories_list" do
+    it "should return the ids from model's categories" do
+      dummy_object.category = [category, category2]
+      dummy_object.categories_list.include?(category2.id.to_s).should be_true
+      dummy_object.categories_list.include?(category.id.to_s).should be_true
+    end
+  end
+
+  describe "#categories_list=" do
+    it "should receive a string with ids and insert them as categories to the model" do
+      dummy_object.categories_list = "#{category.id}, #{category2.id}"
+      dummy_object.categories.should =~ [category, category2]
     end
   end
 
