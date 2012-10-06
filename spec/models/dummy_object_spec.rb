@@ -46,6 +46,27 @@ describe DummyObject do
   end
 
   context "scopes" do
+    describe "#inside_category" do
+      it "should only find items from the category" do
+        correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
+        correct_dummy_list.each { |dummy| dummy.category = category }
+        wrong_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
+        dummy_matches = DummyObject.inside_category(category).all
+        dummy_matches.should =~ correct_dummy_list
+        dummy_matches.should_not =~ wrong_dummy_list
+      end
+
+      it "should list items from all subcategories" do
+        wrong_dummy_list   = FactoryGirl.create_list(:dummy_object, 4)
+        correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
+        subcategory        = FactoryGirl.create(:category, :child, parent: category)
+        correct_dummy_list.each { |dummy| dummy.category = subcategory }
+        dummy_matches = DummyObject.inside_category(category).all
+        dummy_matches.should =~ correct_dummy_list
+        dummy_matches.should_not =~ wrong_dummy_list
+      end
+    end
+
     describe "#having_category" do
       it "should only find items from the category" do
         correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
@@ -56,33 +77,12 @@ describe DummyObject do
         dummy_matches.should_not =~ wrong_dummy_list
       end
 
-      it "should list items from all subcategories" do
-        wrong_dummy_list   = FactoryGirl.create_list(:dummy_object, 4)
-        correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
-        subcategory        = FactoryGirl.create(:category, :child, parent: category)
-        correct_dummy_list.each { |dummy| dummy.category = subcategory }
-        dummy_matches = DummyObject.having_category(category).all
-        dummy_matches.should =~ correct_dummy_list
-        dummy_matches.should_not =~ wrong_dummy_list
-      end
-    end
-
-    describe "#having_direct_category" do
-      it "should only find items from the category" do
-        correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
-        correct_dummy_list.each { |dummy| dummy.category = category }
-        wrong_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
-        dummy_matches = DummyObject.having_direct_category(category).all
-        dummy_matches.should =~ correct_dummy_list
-        dummy_matches.should_not =~ wrong_dummy_list
-      end
-
       it "should not find items from subcategories" do
         wrong_dummy_list   = FactoryGirl.create_list(:dummy_object, 4)
         correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
         subcategory        = FactoryGirl.create(:category, :child, parent: category)
         correct_dummy_list.each { |dummy| dummy.category = subcategory }
-        dummy_matches = DummyObject.having_direct_category(category).all
+        dummy_matches = DummyObject.having_category(category).all
         dummy_matches.should be_empty
       end
     end

@@ -3,8 +3,8 @@ module Categoryz3
   #
   # This will give the model 2 scopes:
   #
-  #   * having_category(category) : Filter objects that belongs to the category or any of it's subcategories
-  #   * having_direct_category(category) : Filter objects that belongs only to the category
+  #   * inside_category(category) : Filter objects that belongs to the category or any of it's subcategories
+  #   * having_category(category) : Filter objects that belongs only to the category
   #
   # And 2 new relations:
   #
@@ -16,8 +16,8 @@ module Categoryz3
     included do
       has_many :direct_category_items , class_name: 'Categoryz3::Item'      , as: :categorizable
       has_many :child_category_items  , class_name: 'Categoryz3::ChildItem' , as: :categorizable
-      scope :having_category        , ->(category) { joins(:child_category_items).where('categoryz3_child_items.category_id = ?' , category.id) }
-      scope :having_direct_category , ->(category) { joins(:direct_category_items).where('categoryz3_items.category_id = ?'      , category.id) }
+      scope :inside_category , ->(category) { joins(:child_category_items).where('categoryz3_child_items.category_id = ?' , category.id) }
+      scope :having_category , ->(category) { joins(:direct_category_items).where('categoryz3_items.category_id = ?'      , category.id) }
     end
 
     # Public: List all object categories
