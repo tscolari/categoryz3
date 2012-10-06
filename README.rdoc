@@ -1,3 +1,102 @@
 = Categoryz3
 
+Simple categorization to ActiveRecord models.
+Works like a simple tagging system, but instead of tags it has categories, and categories may have an ilimited level of subcategories.
+
+Using an auxiliary table, it's easy and fast to fetch items from any category, including all level of subcategories it may have.
+
+== Installation
+
+Insert the gem in your Gemfile:
+
+```
+  gem 'categoryz3'
+```
+
+Generate and run the migrations:
+
+```
+rails g categoryz3:migrations
+rake db:migrate
+```
+
+Include the categorizable module in the models you want to categorize:
+
+```
+class Article < ActiveRecord::Base
+  include Categoryz3::Categorizable
+end
+```
+
+== Usage
+
+=== Listing categories from an object
+
+You can use the method `categories` to list all categories from a model:
+
+```
+model.categories
+#=> [category1, category2]
+```
+
+Also you can use the `categories_list`, this will return the categories ids:
+
+```
+model.categories_list
+#=> "1, 2"
+```
+
+=== Adding categories to an object
+
+There are 2 ways for adding categories to an object:
+
+```
+model.category = category
+model.category = [category1, category2, category3]
+# alias_method :categories=, :category=
+```
+This method does not replace any category from the model, only append new ones.
+
+```
+model.categories_list = "1, 2, 3"
+```
+This method will replace the categories from the object for the ones with ids 1, 2 and 3.
+
+=== Removing categories from an object
+
+To remove a category from the model, you can use the `remove_category` method:
+
+```
+model.remove_category category
+```
+
+=== Category Path
+
+Lists all the categories in the path, from the root one, to the category:
+
+```
+category.path
+#=> [root_category, some_subcategory, another_subcategory, category]
+```
+
+=== Having Category Scopes
+
+==== having_category
+
+Lists all objects that belongs to the category or any subcategory of it
+
+```
+Article.having_category(category)
+```
+
+==== having_direct_category
+
+Lists all objects that belongs to the category. (No subcategory objects).
+
+```
+Article.having_direct_category(category)
+```
+
+= License
+
 This project rocks and uses MIT-LICENSE.
