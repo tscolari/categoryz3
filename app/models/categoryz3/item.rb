@@ -4,6 +4,9 @@ module Categoryz3
     belongs_to :categorizable, polymorphic: true
     has_many   :child_items, foreign_key: 'master_item_id', inverse_of: :master_item, dependent: :destroy
 
+    validates :category, :categorizable, presence: true
+    validates :category_id, uniqueness: { scope: [:categorizable_type, :categorizable_id] }
+
     after_create :create_child_items
     attr_accessible :categorizable
 
