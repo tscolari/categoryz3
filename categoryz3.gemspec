@@ -7,11 +7,11 @@ require "categoryz3/version"
 Gem::Specification.new do |s|
   s.name        = "categoryz3"
   s.version     = Categoryz3::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Categoryz3."
-  s.description = "TODO: Description of Categoryz3."
+  s.authors     = ["Tiago Scolari"]
+  s.email       = ["tscolari@gmail.com"]
+  s.homepage    = "https://github.com/tscolari/categoryz3"
+  s.summary     = "Simple categorization to ActiveRecord models."
+  s.description = "Works like a simple tagging system, but instead of tags it has categories, and categories may have an ilimited level of subcategories."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
 
