@@ -7,7 +7,7 @@ Simple categorization to ActiveRecord models.
 
 Works like a simple tagging system, but instead of tags it has categories, and categories may have an ilimited level of subcategories.
 
-Using an auxiliary table, it's easy and fast to fetch items from any category, including all level of subcategories it may have.
+Fetches items in any level of subcategories with a single join.
 
 == Motivation
 
