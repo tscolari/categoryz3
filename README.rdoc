@@ -82,7 +82,6 @@ model.category = category
 model.category = [category1, category2, category3]
 # alias_method :categories=, :category=
 ```
-This method does not replace any category from the model, only append new ones.
 
 ```
 model.categories_list = "1, 2, 3"

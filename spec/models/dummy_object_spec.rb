@@ -5,7 +5,7 @@ describe DummyObject do
   let(:category2)    { FactoryGirl.create(:category) }
   let(:dummy_object) { FactoryGirl.create(:dummy_object) }
 
-  context "adding a category" do
+  context "adding and removing categories" do
     describe "#category=" do
       it "should add a category to categorizable" do
         dummy_object.category = category
@@ -18,6 +18,29 @@ describe DummyObject do
         categories.each do |category|
           dummy_object.categories.include?(category).should be_true
         end
+      end
+
+      it "should replace existing categories" do
+        dummy_object.category = category
+        dummy_object.categories.include?(category).should be_true
+        dummy_object.reload
+        dummy_object.category = category2
+        dummy_object.categories.include?(category).should be_false
+        dummy_object.categories.include?(category2).should be_true
+      end
+    end
+
+    describe "#categories_list=" do
+      it "should receive a string with ids and insert them as categories to the model" do
+        dummy_object.categories_list = "#{category.id}, #{category2.id}"
+        dummy_object.categories.should =~ [category, category2]
+      end
+
+      it "should replace the model categories" do
+        dummy_object.category = category
+        dummy_object.reload
+        dummy_object.categories_list = "#{category2.id}"
+        dummy_object.categories.should =~ [category2]
       end
     end
 
@@ -96,17 +119,6 @@ describe DummyObject do
     end
   end
 
-  describe "#categories_list=" do
-    it "should receive a string with ids and insert them as categories to the model" do
-      dummy_object.categories_list = "#{category.id}, #{category2.id}"
-      dummy_object.categories.should =~ [category, category2]
-    end
 
-    it "should replace the model categories" do
-      dummy_object.category = category
-      dummy_object.categories_list = "#{category2.id}"
-      dummy_object.categories.should =~ [category2]
-    end
-  end
 
 end

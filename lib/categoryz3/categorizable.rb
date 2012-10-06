@@ -37,6 +37,7 @@ module Categoryz3
     #   categorizable_object.categories = [dummy_category1, dummy_category2]
     #
     def category=(categories)
+      self.direct_category_items.destroy_all
       [categories].flatten.each do |category|
         category.direct_items.create(categorizable: self) if category
       end
@@ -69,7 +70,6 @@ module Categoryz3
     # of them to the model
     #
     def categories_list=(ids)
-      self.direct_category_items.destroy_all
       self.categories = ids.split(",").map do |id|
         Category.where(id: id).first
       end
