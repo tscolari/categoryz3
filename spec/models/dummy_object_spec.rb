@@ -101,6 +101,12 @@ describe DummyObject do
       dummy_object.categories_list = "#{category.id}, #{category2.id}"
       dummy_object.categories.should =~ [category, category2]
     end
+
+    it "should replace the model categories" do
+      dummy_object.category = category
+      dummy_object.categories_list = "#{category2.id}"
+      dummy_object.categories.should =~ [category2]
+    end
   end
 
 end

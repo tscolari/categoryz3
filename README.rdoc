@@ -5,6 +5,33 @@ Works like a simple tagging system, but instead of tags it has categories, and c
 
 Using an auxiliary table, it's easy and fast to fetch items from any category, including all level of subcategories it may have.
 
+== Motivation
+
+```
+genres_category      = Categoryz3::Category.create(name: 'genres')
+horror_category      = Categoryz3::Category.create(name: 'horror', parent: genres_category)
+cult_horror_category = Categoryz3::Category.create(name: 'horror', parent: horror_category)
+action_category      = Categoryz3::Category.create(name: 'horror', parent: genres_category)
+
+horror_movie = Movie.find(1)
+horror_movie.category = cult_horror_category
+horror_movie.categories
+#=> [cult_horror_category]
+
+action_movie = Movie.find(2)
+action_movie.category = action_category
+
+Movie.inside_category(genres_category)
+#=> [horror_movie, action_movie]
+Movie.inside_category(horror_category)
+#=> [horror_movie]
+Movie.inside_category(cult_horror_category)
+#=> [horror_movie]
+
+horror_category.path
+#=> [movie_category, horror_category]
+```
+
 == Installation
 
 Insert the gem in your Gemfile:
@@ -81,20 +108,20 @@ category.path
 
 === Having Category Scopes
 
-==== having_category
+==== inside_category
 
 Lists all objects that belongs to the category or any subcategory of it
 
 ```
-Article.having_category(category)
+Article.inside_category(category)
 ```
 
-==== having_direct_category
+==== having_category
 
 Lists all objects that belongs to the category. (No subcategory objects).
 
 ```
-Article.having_direct_category(category)
+Article.having_category(category)
 ```
 
 = License

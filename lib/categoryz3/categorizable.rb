@@ -69,6 +69,7 @@ module Categoryz3
     # of them to the model
     #
     def categories_list=(ids)
+      self.direct_category_items.destroy_all
       self.categories = ids.split(",").map do |id|
         Category.where(id: id).first
       end
