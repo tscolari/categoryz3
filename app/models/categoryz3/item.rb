@@ -10,10 +10,7 @@ module Categoryz3
     private
 
     def create_child_item_for_category(category)
-      child_item = category.child_items.new
-      child_item.categorizable = self.categorizable
-      child_item.master_item   = self
-      child_item.save
+      category.child_items.create(categorizable: self.categorizable, master_item: self)
     end
 
     def create_child_items

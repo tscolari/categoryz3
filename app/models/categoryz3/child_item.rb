@@ -5,5 +5,6 @@ module Categoryz3
     belongs_to :categorizable, polymorphic: true
 
     validates_with Categoryz3::Validators::ChildItemCategoryValidator
+    attr_accessible :master_item, :categorizable
   end
 end
