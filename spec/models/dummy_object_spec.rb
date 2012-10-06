@@ -19,6 +19,30 @@ describe DummyObject do
         end
       end
     end
+
+    describe "#remove_category" do
+      before(:each) do
+        dummy_object.add_category(category)
+      end
+
+      it "should remove a category from the object" do
+        dummy_object.categories.all.include?(category).should be_true
+        dummy_object.remove_category category
+        dummy_object.reload
+        dummy_object.categories.all.include?(category).should be_false
+      end
+
+      it "should remove a list of categories from the object" do
+        category2 = FactoryGirl.create :category
+        dummy_object.add_category category2
+        dummy_object.categories.all.include?(category).should be_true
+        dummy_object.categories.all.include?(category2).should be_true
+        dummy_object.remove_category category, category2
+        dummy_object.reload
+        dummy_object.categories.all.include?(category).should be_false
+        dummy_object.categories.all.include?(category2).should be_false
+      end
+    end
   end
 
   context "scopes" do

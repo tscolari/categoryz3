@@ -31,6 +31,7 @@ module Categoryz3
     # Public: Adds a category, or categories, to the model
     #
     # Examples:
+    #
     #   categorizable_object.add_category dummy_category
     #   categorizable_object.add_categories dummy_category1, dummy_category2
     #
@@ -40,6 +41,19 @@ module Categoryz3
       end
     end
     alias_method :add_categories, :add_category
+
+    # Public: Removes a category, or categories, from the model
+    #
+    # Examples:
+    #
+    #   categorizable_object.remove_category dummy_category
+    #   categorizable_object.remove_categories dummy_category1, dummy_category2
+    #
+    def remove_category(*categories)
+      categories.each do |category|
+        direct_category_items.where(category_id: category).destroy_all
+      end
+    end
 
   end
 end
