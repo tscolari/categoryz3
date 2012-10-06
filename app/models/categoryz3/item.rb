@@ -9,10 +9,15 @@ module Categoryz3
 
     private
 
+    # Private: Creates a child item for the category
+    #
     def create_child_item_for_category(category)
       category.child_items.create(categorizable: self.categorizable, master_item: self)
     end
 
+    # Private: Create a child_item for each subcategory the category from this item have
+    # Also creates a child_item for this category
+    #
     def create_child_items
       category.path.each do |category|
         create_child_item_for_category category

@@ -9,6 +9,13 @@ module Categoryz3
     scope :parent_categories, -> { where(parent_id: nil) }
     attr_accessible :name
 
+    # Public: Returns the full categories path from the root category until this category
+    #
+    # Example:
+    #
+    #   subcategory3.path
+    #   #=> [category, subcategory1, subcategory2, subcategory3]
+    #
     def path
       return @path_array if @path_array
       parent_category = self
