@@ -9,6 +9,17 @@ gemspec
 gem "jquery-rails"
 
 group :test, :development do
+  platforms :jruby do
+    gem 'jdbc-sqlite3'
+    gem 'activerecord-jdbc-adapter'
+    gem 'activerecord-jdbcsqlite3-adapter'
+    gem 'jruby-openssl'
+  end
+
+  platforms :ruby do
+    gem 'sqlite3'
+  end
+
   gem 'rspec-rails'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
