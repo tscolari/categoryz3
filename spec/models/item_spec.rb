@@ -1,10 +1,9 @@
 require 'spec_helper'
 
 module Categoryz3
-  let(:category) { FactoryGirl.create(:category) }
-  let(:item)     { FactoryGirl.create(:item, category: category) }
-
   describe Item do
+    let(:category) { FactoryGirl.build(:category) }
+    let(:item)     { FactoryGirl.create(:item, category: category) }
 
     context "child items" do
       context "first level item" do
@@ -17,21 +16,21 @@ module Categoryz3
 
         it "should remove the child items when deleted" do
           item
-          category.child_items.count.should == 1
+          count = category.child_items.count
           item.destroy
           category.reload
-          category.child_items.count.should == 0
+          category.child_items.count.should == count - 1
         end
       end
 
       context "multi level item" do
-        let(:subcategory) { FactoryGirl.create(:category, :child, category: FactoryGirl.create(:category, :child, category: category))}
+        let(:subcategory) { FactoryGirl.create(:category, :child, parent: FactoryGirl.create(:category, :child, parent: category))}
 
         it "should create child items for all subcategories when created" do
           item = FactoryGirl.create(:item, category: subcategory)
           subcategory.path.each do |category|
             child_item = category.child_items.first
-            child_item.dummy.should == item.dummy
+            child_item.categorizable.should == item.categorizable
           end
         end
 

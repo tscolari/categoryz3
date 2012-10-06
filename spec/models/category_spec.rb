@@ -3,11 +3,11 @@ require 'spec_helper'
 module Categoryz3
   describe Category do
 
-    let(:category) { FactoryGirl.create(:category) }
+    let(:category) { FactoryGirl.build(:category) }
 
     context "parent association" do
       it "should have an association with category as parent" do
-        child_category = FactoryGirl.create(:category, :child, parent: category) 
+        child_category = FactoryGirl.build(:category, :child, parent: category) 
         child_category.parent.should == category
       end
 
@@ -19,8 +19,8 @@ module Categoryz3
 
     context "path listing" do
       it "should list the category path" do
-        first_level_category = FactoryGirl.create(:category, :child, parent: category)
-        second_level_category = FactoryGirl.create(:category, :child, parent: first_level_category)
+        first_level_category = FactoryGirl.build(:category, :child, parent: category)
+        second_level_category = FactoryGirl.build(:category, :child, parent: first_level_category)
         third_level_category = FactoryGirl.create(:category, :child, parent: second_level_category)
         third_level_category.path.should == [category, first_level_category, second_level_category, third_level_category]
         second_level_category.path.should == [category, first_level_category, second_level_category]
