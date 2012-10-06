@@ -1,4 +1,7 @@
 = Categoryz3
+{<img src="https://secure.travis-ci.org/tscolari/categoryz3.png" />}[http://travis-ci.org/tscolari/categoryz3]
+{<img src="https://gemnasium.com/tscolari/categoryz3.png" />}[https://gemnasium.com/tscolari/categoryz3]
+{<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/tscolari/categoryz3]
 
 Simple categorization to ActiveRecord models.
 
@@ -21,11 +24,11 @@ Using an auxiliary table, it's easy and fast to fetch items from any category, i
   action_movie = Movie.find(2)
   action_movie.category = action_category
 
-  Movie.inside_category(genres_category)
+  Movie.inside_category(genres_category).all
   #=> [horror_movie, action_movie]
-  Movie.inside_category(horror_category)
+  Movie.inside_category(horror_category).all
   #=> [horror_movie]
-  Movie.inside_category(cult_horror_category)
+  Movie.inside_category(cult_horror_category).all
   #=> [horror_movie]
 
   horror_category.path
@@ -57,7 +60,7 @@ You can use the method `categories` to list all categories from a model:
   model.categories
   #=> [category1, category2]
 
-Also you can use the `categories_list`, this will return the categories ids:
+You can also use the `categories_list`, this will return the categories ids:
 
   model.categories_list
   #=> "1, 2"
@@ -70,17 +73,18 @@ There are 2 ways for adding categories to an object:
   model.category = [category1, category2, category3]
   # alias_method :categories=, :category=
 
-Replaces the categories for the given ones.
+Replaces the object categories for the given ones.
 
   model.categories_list = "1, 2, 3"
 
-This method will replace the categories from the object for the ones with ids 1, 2 and 3.
+Replaces the object categories for the ones with ids 1, 2 and 3.
 
 === Removing categories from an object
 
 To remove a category from the model, you can use the `remove_category` method:
 
   model.remove_category category
+  model.remove_categories category1, category2
 
 === Category Path
 
@@ -89,7 +93,7 @@ Lists all the categories in the path, from the root one, to the category:
   category.path
   #=> [root_category, some_subcategory, another_subcategory, category]
 
-=== Having Category Scopes
+=== Categorizable Scopes
 
 ==== inside_category
 
