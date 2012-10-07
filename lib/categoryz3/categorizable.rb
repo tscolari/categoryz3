@@ -63,14 +63,15 @@ module Categoryz3
     # Public: Returns the id list of the categories linked to the model
     #
     def categories_list
-      categories.map(&:id).join(", ")
+      categories.map(&:id).join(",")
     end
 
     # Public: Accepts an array of category ids as parameter and adds all
     # of them to the model
     #
     def categories_list=(ids)
-      self.categories = ids.split(",").map do |id|
+      ids = ids.is_a?(String) ? ids.split(',') : ids
+      self.categories = ids.map do |id|
         Category.where(id: id).first
       end
     end
