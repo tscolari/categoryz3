@@ -109,4 +109,4 @@ Lists all objects that belongs to the category. (No subcategory objects).
 
 = License
 
-This project rocks and uses MIT-LICENSE.
+MIT License. Copyright 2012 Tiago Scolari.
