@@ -1,6 +1,5 @@
 = Categoryz3
 {<img src="https://secure.travis-ci.org/tscolari/categoryz3.png" />}[http://travis-ci.org/tscolari/categoryz3]
-{<img src="https://gemnasium.com/tscolari/categoryz3.png" />}[https://gemnasium.com/tscolari/categoryz3]
 {<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/tscolari/categoryz3]
 
 Simple categorization to ActiveRecord models.
