@@ -20,13 +20,7 @@ module Categoryz3
     #   #=> [category, subcategory1, subcategory2, subcategory3]
     #
     def path
-      return @path_array if @path_array
-      parent_category = self
-      @path_array = [parent_category]
-      while (parent_category = parent_category.parent) != nil do
-        @path_array.insert(0, parent_category) 
-      end
-      @path_array
+      @path_array ||= parent ? [parent.path, self].flatten : [self]
     end
 
     # Public: Reprocess all items from this category
