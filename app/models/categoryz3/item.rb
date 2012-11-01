@@ -10,6 +10,13 @@ module Categoryz3
     after_create :create_child_items
     attr_accessible :categorizable
 
+    # Public: Destroy the child items and recreate them
+    #
+    def reprocess_child_items!
+      self.child_items.destroy_all
+      create_child_items
+    end
+
     private
 
     # Private: Creates a child item for the category
@@ -22,8 +29,8 @@ module Categoryz3
     # Also creates a child_item for this category
     #
     def create_child_items
-      category.path.each do |category|
-        create_child_item_for_category category
+      self.category.path.each do |parent_category|
+        create_child_item_for_category parent_category
       end
     end
 

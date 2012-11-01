@@ -37,5 +37,38 @@ module Categoryz3
       end
     end
 
+    context "moving category from parent" do
+      context "with child categories" do
+        let(:child_category_1) { FactoryGirl.create(:category, :child, parent: category         , name: 'child_1') }
+        let(:child_category_2) { FactoryGirl.create(:category, :child, parent: child_category_1 , name: 'child_2') }
+        let(:child_category_3) { FactoryGirl.create(:category, :child, parent: child_category_2 , name: 'child_3') }
+
+        before(:each) do
+          FactoryGirl.create(:item, category: child_category_2)
+          FactoryGirl.create(:item, category: child_category_3)
+        end
+
+        it "should chain reprocess all child categories" do
+          category.child_items.count.should eq 2
+          new_root_category       = FactoryGirl.create(:category, name: 'new_root')
+          child_category_2.parent = new_root_category
+          child_category_2.save
+
+          category.reload
+          child_category_1.reload
+          child_category_2.reload
+          new_root_category.reload
+
+          category.child_items.count.should eq 0
+          child_category_1.child_items.count.should eq 0
+          child_category_2.child_items.count.should eq 2
+          child_category_3.child_items.count.should eq 1
+          new_root_category.child_items.count.should eq 2
+        end
+      end
+
+
+    end
+
   end
 end

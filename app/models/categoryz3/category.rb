@@ -8,6 +8,9 @@ module Categoryz3
 
     scope :parent_categories, -> { where(parent_id: nil) }
     attr_accessible :name, :parent, :parent_id
+    
+    before_update :mark_as_dirty_if_parent_changed
+    after_update  :update_children_if_parent_changed
 
     # Public: Returns the full categories path from the root category until this category
     #
@@ -24,6 +27,28 @@ module Categoryz3
         @path_array.insert(0, parent_category) 
       end
       @path_array
+    end
+
+    # Public: Reprocess all items from this category
+    #
+    def reprocess_items!
+      @path_array = nil
+      self.direct_items.each { |item| item.reprocess_child_items! }
+      self.children.each     { |category| category.reprocess_items! }
+    end
+
+    private
+
+    def mark_as_dirty_if_parent_changed
+      @dirty_parent = parent_id_changed?
+    end
+
+    # Private: Reprocess all items in case the parent category
+    #          of this category has changed.
+    def update_children_if_parent_changed
+      if @dirty_parent
+        reprocess_items!
+      end
     end
 
   end

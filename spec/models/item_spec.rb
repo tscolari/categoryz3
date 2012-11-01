@@ -41,6 +41,19 @@ module Categoryz3
           subcategory.path.each { |category| category.child_items.count.should == 0 }
         end
       end
+
+      context "reprocessing items" do
+        let(:root_category) { FactoryGirl.create(:category) }
+        let(:category)      { FactoryGirl.create(:category, :child, parent: root_category) }
+
+        it "should recreate all child items on reprocess" do
+          child_items = item.child_items.count
+          item.child_items.each { |child_item| child_item.should_receive(:destroy).once }
+          item.reprocess_child_items!
+          item.child_items.count.should eq child_items
+        end
+      end
+
     end
 
   end
