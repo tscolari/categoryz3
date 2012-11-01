@@ -7,7 +7,7 @@ module Categoryz3
     validates :name        , presence: true
 
     scope :parent_categories, -> { where(parent_id: nil) }
-    attr_accessible :name, :parent
+    attr_accessible :name, :parent, :parent_id
 
     # Public: Returns the full categories path from the root category until this category
     #
