@@ -15,7 +15,7 @@ module Categoryz3
     # Private: Creates a child item for the category
     #
     def create_child_item_for_category(category)
-      category.child_items.create(categorizable: self.categorizable, master_item: self)
+      category.child_items.find_or_create_by_categorizable_type_and_categorizable_id_and_master_item_id( self.categorizable.class.name, self.categorizable.id, self.id)
     end
 
     # Private: Create a child_item for each subcategory the category from this item have
