@@ -5,6 +5,7 @@ module Categoryz3
     has_many :direct_items , class_name: 'Categoryz3::Item'      , inverse_of: :category   , dependent: :destroy
     has_many :child_items  , class_name: 'Categoryz3::ChildItem' , inverse_of: :category   , dependent: :destroy
     validates :name        , presence: true
+    validates_with Categoryz3::Validators::ParentCategoryValidator
 
     scope :root_categories,   -> { where(parent_id: nil) }
     scope :parent_categories, -> { root_categories       }

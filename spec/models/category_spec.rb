@@ -15,6 +15,12 @@ module Categoryz3
         children = FactoryGirl.create_list(:category, 5, :child, parent: category)
         category.children.should =~ children
       end
+
+      it "Can not be parent of itself", focus: true do
+        category.save
+        category.parent_id = category.id
+        category.should_not be_valid
+      end
     end
 
     context "path listing" do
@@ -38,8 +44,15 @@ module Categoryz3
     end
 
     context "moving category from parent" do
+      let(:child_category_1) { FactoryGirl.create(:category, :child, parent: category         , name: 'child_1') }
+
+      it "should not be valid if moving to a child category" do
+        category.should be_valid
+        category.parent_id = child_category_1.id
+        category.should_not be_valid
+      end
+
       context "with child categories" do
-        let(:child_category_1) { FactoryGirl.create(:category, :child, parent: category         , name: 'child_1') }
         let(:child_category_2) { FactoryGirl.create(:category, :child, parent: child_category_1 , name: 'child_2') }
         let(:child_category_3) { FactoryGirl.create(:category, :child, parent: child_category_2 , name: 'child_3') }
 
@@ -66,8 +79,6 @@ module Categoryz3
           new_root_category.child_items.count.should eq 2
         end
       end
-
-
     end
 
   end
