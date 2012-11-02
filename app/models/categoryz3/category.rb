@@ -6,7 +6,8 @@ module Categoryz3
     has_many :child_items  , class_name: 'Categoryz3::ChildItem' , inverse_of: :category   , dependent: :destroy
     validates :name        , presence: true
 
-    scope :parent_categories, -> { where(parent_id: nil) }
+    scope :root_categories,   -> { where(parent_id: nil) }
+    scope :parent_categories, -> { root_categories       }
     attr_accessible :name, :parent, :parent_id
     
     before_update :mark_as_dirty_if_parent_changed
@@ -35,6 +36,7 @@ module Categoryz3
 
     def mark_as_dirty_if_parent_changed
       @dirty_parent = parent_id_changed?
+      true
     end
 
     # Private: Reprocess all items in case the parent category
