@@ -1,6 +1,6 @@
 module Categoryz3
   class Category < ActiveRecord::Base
-    belongs_to :parent     , class_name: 'Categoryz3::Category'  , inverse_of: :children
+    belongs_to :parent     , class_name: 'Categoryz3::Category'  , inverse_of: :children   , counter_cache: 'childrens_count'
     has_many :children     , class_name: 'Categoryz3::Category'  , foreign_key: :parent_id , inverse_of: :parent , dependent: :destroy
     has_many :direct_items , class_name: 'Categoryz3::Item'      , inverse_of: :category   , dependent: :destroy
     has_many :child_items  , class_name: 'Categoryz3::ChildItem' , inverse_of: :category   , dependent: :destroy

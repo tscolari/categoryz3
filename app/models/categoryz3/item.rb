@@ -1,6 +1,6 @@
 module Categoryz3
   class Item < ActiveRecord::Base
-    belongs_to :category, inverse_of: :direct_items
+    belongs_to :category, inverse_of: :direct_items, counter_cache: 'items_count'
     belongs_to :categorizable, polymorphic: true
     has_many   :child_items, foreign_key: 'master_item_id', inverse_of: :master_item, dependent: :destroy
 
