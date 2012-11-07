@@ -16,12 +16,12 @@ Fetches items in any level of subcategories with a single join.
   action_category      = Categoryz3::Category.create(name: 'horror', parent: genres_category)
 
   horror_movie = Movie.find(1)
-  horror_movie.category = cult_horror_category
+  horror_movie.categories << cult_horror_category
   horror_movie.categories
   #=> [cult_horror_category]
 
   action_movie = Movie.find(2)
-  action_movie.category = action_category
+  action_movie.categories << action_category
 
   Movie.inside_category(genres_category).all
   #=> [horror_movie, action_movie]
@@ -54,7 +54,7 @@ Include the categorizable module in the models you want to categorize:
 
 === Listing categories from an object
 
-You can use the method `categories` to list all categories from a model:
+You can use the relation `categories` to list all categories from a model:
 
   model.categories
   #=> [category1, category2]
@@ -68,15 +68,8 @@ You can also use the `categories_list`, this will return the categories ids:
 
 There are 2 ways for adding categories to an object:
 
-  model.category = category
-  model.category = [category1, category2, category3]
-  # alias_method :categories=, :category=
-
-Replaces the object categories for the given ones.
-
+  model.categories << category
   model.categories_list = "1, 2, 3"
-
-Replaces the object categories for the ones with ids 1, 2 and 3.
 
 === Removing categories from an object
 
