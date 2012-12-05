@@ -14,8 +14,8 @@ module Categoryz3
   module Categorizable
     extend ActiveSupport::Concern
     included do
-      has_many :direct_category_items , class_name: 'Categoryz3::Item'      , as: :categorizable
-      has_many :child_category_items  , class_name: 'Categoryz3::ChildItem' , as: :categorizable
+      has_many :direct_category_items , class_name: 'Categoryz3::Item'      , as: :categorizable, inverse_of: :categorizable
+      has_many :child_category_items  , class_name: 'Categoryz3::ChildItem' , as: :categorizable, inverse_of: :categorizable
       has_many :categories, through: :direct_category_items, as: :categorizable, class_name: 'Categoryz3::Category'
       scope :inside_category , ->(category) { joins(:child_category_items).where('categoryz3_child_items.category_id = ?' , category.id) }
       scope :having_category , ->(category) { joins(:direct_category_items).where('categoryz3_items.category_id = ?'      , category.id) }
