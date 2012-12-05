@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    categoryz3 (0.8)
+    categoryz3 (0.8.1)
       rails (~> 3.2.8)
 
 GEM
