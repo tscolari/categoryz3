@@ -7,6 +7,5 @@ module Categoryz3
     validates :category, :master_item, :categorizable, presence: true
     validates :category_id, uniqueness: { scope: [:categorizable_type, :categorizable_id] }
     validates_with Categoryz3::Validators::ChildItemCategoryValidator
-    attr_accessible :master_item, :categorizable
   end
 end

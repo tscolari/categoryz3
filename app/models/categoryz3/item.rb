@@ -8,7 +8,6 @@ module Categoryz3
     validates :category_id, uniqueness: { scope: [:categorizable_type, :categorizable_id] }
 
     after_create :create_child_items
-    attr_accessible :categorizable
 
     # Public: Destroy the child items and recreate them
     #

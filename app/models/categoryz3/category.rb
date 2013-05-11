@@ -9,8 +9,7 @@ module Categoryz3
 
     scope :root_categories,   -> { where(parent_id: nil) }
     scope :parent_categories, -> { root_categories       }
-    attr_accessible :name, :parent, :parent_id
-    
+
     before_update :mark_as_dirty_if_parent_changed
     after_update  :update_children_if_parent_changed
 
