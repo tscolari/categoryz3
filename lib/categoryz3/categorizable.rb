@@ -35,10 +35,10 @@ module Categoryz3
         class_name: 'Categoryz3::Category'
 
       has_many :root_categories,
+        -> { where(parent_id: nil) },
         through: :child_category_items,
         source: 'category',
-        class_name: 'Categoryz3::Category',
-        conditions: { parent_id: nil }
+        class_name: 'Categoryz3::Category'
 
       scope :inside_category ,
         ->(category) { joins(:child_category_items).where('categoryz3_child_items.category_id = ?' , category.id) }
