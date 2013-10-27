@@ -16,7 +16,8 @@ module Categoryz3
     included do
       has_many :direct_category_items , class_name: 'Categoryz3::Item'      , as: :categorizable, inverse_of: :categorizable
       has_many :child_category_items  , class_name: 'Categoryz3::ChildItem' , as: :categorizable, inverse_of: :categorizable
-      has_many :categories, through: :direct_category_items, as: :categorizable, class_name: 'Categoryz3::Category'
+      has_many :categories, through: :direct_category_items, source: 'category', class_name: 'Categoryz3::Category'
+      has_many :all_categories, through: :child_category_items, source: 'category', class_name: 'Categoryz3::Category'
       scope :inside_category , ->(category) { joins(:child_category_items).where('categoryz3_child_items.category_id = ?' , category.id) }
       scope :having_category , ->(category) { joins(:direct_category_items).where('categoryz3_items.category_id = ?'      , category.id) }
     end
@@ -40,6 +41,10 @@ module Categoryz3
     #
     def categories_list
       categories.map(&:id).join(",")
+    end
+
+    def root_categories
+      all_categories.where(parent_id: nil)
     end
 
     # Public: Accepts an array of category ids as parameter and adds all
