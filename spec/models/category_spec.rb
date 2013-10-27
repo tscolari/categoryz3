@@ -7,13 +7,13 @@ module Categoryz3
 
     context "parent association" do
       it "should have an association with category as parent" do
-        child_category = FactoryGirl.build(:category, :child, parent: category) 
+        child_category = FactoryGirl.build(:category, :child, parent: category)
         child_category.parent.should == category
       end
 
       it "should list children categories" do
         children = FactoryGirl.create_list(:category, 5, :child, parent: category)
-        category.children.should =~ children
+        category.children.all.should =~ children
       end
 
       it "Can not be parent of itself", focus: true do

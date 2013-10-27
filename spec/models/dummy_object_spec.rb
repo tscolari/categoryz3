@@ -3,6 +3,8 @@ require 'spec_helper'
 describe DummyObject do
   let(:category)     { FactoryGirl.create(:category) }
   let(:category2)    { FactoryGirl.create(:category) }
+  let(:child_category1) { FactoryGirl.create(:category, parent: category) }
+  let(:child_category2) { FactoryGirl.create(:category, parent: category2) }
   let(:dummy_object) { FactoryGirl.create(:dummy_object) }
 
   context "adding and removing categories" do
@@ -33,14 +35,14 @@ describe DummyObject do
     describe "#categories_list=" do
       it "should receive a string with ids and insert them as categories to the model" do
         dummy_object.categories_list = "#{category.id}, #{category2.id}"
-        dummy_object.categories.should =~ [category, category2]
+        dummy_object.categories.all.should =~ [category, category2]
       end
 
       it "should replace the model categories" do
         dummy_object.categories << category
         dummy_object.reload
         dummy_object.categories_list = "#{category2.id}"
-        dummy_object.categories.should =~ [category2]
+        dummy_object.categories.all.should =~ [category2]
       end
     end
 
@@ -65,6 +67,14 @@ describe DummyObject do
         dummy_object.categories.all.include?(category).should be_false
         dummy_object.categories.all.include?(category2).should be_false
       end
+    end
+  end
+
+  describe "#root_categories" do
+    it "should list all categories that are connected, and have parent -> nil" do
+      dummy_object.categories << child_category1
+      dummy_object.categories << child_category2
+      dummy_object.root_categories.all.should =~ [category, category2]
     end
   end
 
