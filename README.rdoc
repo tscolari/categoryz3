@@ -2,6 +2,8 @@
 {<img src="https://secure.travis-ci.org/tscolari/categoryz3.png" />}[http://travis-ci.org/tscolari/categoryz3]
 {<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/tscolari/categoryz3]
 
+__Version 0.9+ is rails4 compatible__
+
 Simple categorization to ActiveRecord models.
 
 Works like a simple tagging system, but instead of tags it has categories, and categories may have an ilimited level of subcategories.
