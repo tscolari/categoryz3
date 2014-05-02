@@ -47,10 +47,9 @@ module Categoryz3
         let(:category)      { FactoryGirl.create(:category, :child, parent: root_category) }
 
         it "should recreate all child items on reprocess" do
-          child_items = item.child_items.count
-          item.child_items.each { |child_item| child_item.should_receive(:destroy).once }
-          item.reprocess_child_items!
-          item.child_items.count.should eq child_items
+          expect {
+            item.reprocess_child_items!
+          }.to_not change { item.reload.child_items.count }
         end
       end
 

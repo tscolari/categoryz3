@@ -1,6 +1,6 @@
 module Categoryz3
   class ChildItem < ActiveRecord::Base
-    belongs_to :category, inverse_of: :child_items, counter_cache: 'child_items_count'
+    belongs_to :category, inverse_of: :child_items, counter_cache: :child_items_count
     belongs_to :master_item, class_name: 'Categoryz3::Item', inverse_of: :child_items
     belongs_to :categorizable, polymorphic: true, inverse_of: :child_category_items
 

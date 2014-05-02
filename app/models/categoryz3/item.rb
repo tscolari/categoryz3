@@ -1,8 +1,8 @@
 module Categoryz3
   class Item < ActiveRecord::Base
-    belongs_to :category, inverse_of: :direct_items, counter_cache: 'items_count'
+    belongs_to :category, inverse_of: :direct_items, counter_cache: :items_count
     belongs_to :categorizable, polymorphic: true, inverse_of: :direct_category_items
-    has_many   :child_items, foreign_key: 'master_item_id', inverse_of: :master_item, dependent: :destroy
+    has_many   :child_items, foreign_key: :master_item_id, inverse_of: :master_item, dependent: :destroy
 
     validates :category, :categorizable, presence: true
     validates :category_id, uniqueness: { scope: [:categorizable_type, :categorizable_id] }
@@ -12,7 +12,7 @@ module Categoryz3
     # Public: Destroy the child items and recreate them
     #
     def reprocess_child_items!
-      self.child_items.destroy_all
+      self.child_items.delete_all
       create_child_items
     end
 

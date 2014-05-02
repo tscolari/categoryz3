@@ -13,7 +13,7 @@ module Categoryz3
 
       it "should list children categories" do
         children = FactoryGirl.create_list(:category, 5, :child, parent: category)
-        category.children.all.should =~ children
+        category.children.all.to_a.should =~ children
       end
 
       it "Can not be parent of itself", focus: true do
@@ -39,7 +39,7 @@ module Categoryz3
       it "should list only parent categories" do
         categories = FactoryGirl.create_list(:category, 5)
         subcategories = FactoryGirl.create_list(:category, 5, :child, parent: categories.first)
-        Category.parent_categories.all.should =~ categories
+        Category.parent_categories.all.to_a.should =~ categories
       end
     end
 

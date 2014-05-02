@@ -26,18 +26,18 @@ module Categoryz3
 
       has_many :categories,
         through: :direct_category_items,
-        source: 'category',
+        source: :category,
         class_name: 'Categoryz3::Category'
 
       has_many :all_categories,
         through: :child_category_items,
-        source: 'category',
+        source: :category,
         class_name: 'Categoryz3::Category'
 
       has_many :root_categories,
         -> { where(parent_id: nil) },
         through: :child_category_items,
-        source: 'category',
+        source: :category,
         class_name: 'Categoryz3::Category'
 
       scope :inside_category ,

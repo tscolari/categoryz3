@@ -35,14 +35,14 @@ describe DummyObject do
     describe "#categories_list=" do
       it "should receive a string with ids and insert them as categories to the model" do
         dummy_object.categories_list = "#{category.id}, #{category2.id}"
-        dummy_object.categories.all.should =~ [category, category2]
+        dummy_object.categories.all.to_a.should =~ [category, category2]
       end
 
       it "should replace the model categories" do
         dummy_object.categories << category
         dummy_object.reload
         dummy_object.categories_list = "#{category2.id}"
-        dummy_object.categories.all.should =~ [category2]
+        dummy_object.categories.all.to_a.should =~ [category2]
       end
     end
 
@@ -74,7 +74,7 @@ describe DummyObject do
     it "should list all categories that are connected, and have parent -> nil" do
       dummy_object.categories << child_category1
       dummy_object.categories << child_category2
-      dummy_object.root_categories.all.should =~ [category, category2]
+      dummy_object.root_categories.all.to_a.should =~ [category, category2]
     end
   end
 
@@ -84,7 +84,7 @@ describe DummyObject do
         correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
         correct_dummy_list.each { |dummy| dummy.categories << category }
         wrong_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
-        dummy_matches = DummyObject.inside_category(category).all
+        dummy_matches = DummyObject.inside_category(category).all.to_a
         dummy_matches.should =~ correct_dummy_list
         dummy_matches.should_not =~ wrong_dummy_list
       end
@@ -94,7 +94,7 @@ describe DummyObject do
         correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
         subcategory        = FactoryGirl.create(:category, :child, parent: category)
         correct_dummy_list.each { |dummy| dummy.categories << subcategory }
-        dummy_matches = DummyObject.inside_category(category).all
+        dummy_matches = DummyObject.inside_category(category).all.to_a
         dummy_matches.should =~ correct_dummy_list
         dummy_matches.should_not =~ wrong_dummy_list
       end
@@ -105,7 +105,7 @@ describe DummyObject do
         correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
         correct_dummy_list.each { |dummy| dummy.categories << category }
         wrong_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
-        dummy_matches = DummyObject.having_category(category).all
+        dummy_matches = DummyObject.having_category(category).all.to_a
         dummy_matches.should =~ correct_dummy_list
         dummy_matches.should_not =~ wrong_dummy_list
       end
@@ -115,7 +115,7 @@ describe DummyObject do
         correct_dummy_list = FactoryGirl.create_list(:dummy_object, 4)
         subcategory        = FactoryGirl.create(:category, :child, parent: category)
         correct_dummy_list.each { |dummy| dummy.categories << subcategory }
-        dummy_matches = DummyObject.having_category(category).all
+        dummy_matches = DummyObject.having_category(category).all.to_a
         dummy_matches.should be_empty
       end
     end
